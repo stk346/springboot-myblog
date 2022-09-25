@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 // RestController는 사용자가 요청한 응답에 대해 응답하는 역할을 함
 @RestController
 public class HttpControllerTest { // id=1&username=ssar&password=1234&email=ssar@nate.com, 매핑 작업은 MessageConverter (스프링부트)가 한다.
+    private static String TAG = "HttpControllerTest";
+
     // 인터넷 브라우저 요청은 무조건 get 요청밖에 될 수 없다.
     //http://localhost:8080/http/get (select)
     @GetMapping("/http/get")
