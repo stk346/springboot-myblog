@@ -4,6 +4,7 @@ import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,17 @@ public class DummyControllerTest {
 
     @Autowired // 의존성 주입(DI)
     private UserRepository userRepository;
+
+    @DeleteMapping("/dummy/user/{id}")
+    public String delete(@PathVariable int id) {
+        try {
+            userRepository.deleteById(id); //  이렇게 하고 코드를 마무리할 경우 id에 대한 null값 처리가 안됨
+        } catch (EmptyResultDataAccessException e) {
+            return "삭제에 실패하였습니다. 해당 id는 DB에 없습니다.";
+        }
+
+        return "삭제 되었습니다. id: " + id;
+    }
 
     // 밑의 /dummy/user/{id}와 url이 겹치는데, 각각 Get과 Put이기 때문에 상관 없음.
     // save 함수는 id를 전달하지 않으면 insert를 해주고
@@ -42,7 +54,7 @@ public class DummyControllerTest {
         // userRepository.save(user); // 위에서 변경된 Object를 집어넣음
 
         // 더티 체킹
-    return null;
+    return user;
     }
 
     // http://localhost:8000/blog/dummy/user
