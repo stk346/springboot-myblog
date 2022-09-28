@@ -8,11 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -22,6 +20,30 @@ public class DummyControllerTest {
 
     @Autowired // 의존성 주입(DI)
     private UserRepository userRepository;
+
+    // 밑의 /dummy/user/{id}와 url이 겹치는데, 각각 Get과 Put이기 때문에 상관 없음.
+    // save 함수는 id를 전달하지 않으면 insert를 해주고
+    // save 함수는 id를 전달하면 해당 id에 대한 데이터가 있으면 update를 해주고
+    // save 함수는 id를 전달하면 해당 id에 대한 데이터가 없으면 insert를 진행
+    // email. password를 받아서 수정할 예정.
+    @Transactional // 함수 종료시에 자동 commit이 됨.
+    @PutMapping("/dummy/user/{id}")
+    public User updateUser(@PathVariable int id, @RequestBody User requestUser) { // json데이터를 요청 -> MassageConverter의 Jackson 라이브러리가 Java Object로 변환해서 받아준다. 이 때 필요한 어노테이션이 @RequestBody임.
+        System.out.println("id: " + id);
+        System.out.println("password: " + requestUser.getPassword());
+        System.out.println("email: " + requestUser.getEmail());
+
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            return new IllegalArgumentException("수정에 실패하였습니다");
+        }); // 이 user는 데이터베이스에서 존재하던 기존의 값을 가져온 것임.
+        user.setPassword(requestUser.getPassword()); // 기존 값에 파라미터로 받은 값을 넣어줌
+        user.setEmail(requestUser.getEmail()); // 기존 값에 파라미터로 받은 값을 넣어줌
+
+        // userRepository.save(user); // 위에서 변경된 Object를 집어넣음
+
+        // 더티 체킹
+    return null;
+    }
 
     // http://localhost:8000/blog/dummy/user
     @GetMapping("/dummy/users")
