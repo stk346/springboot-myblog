@@ -27,7 +27,7 @@ public class Reply {
     @JoinColumn(name="boardId")
     private Board board;
 
-    @ManyToOne
+    @ManyToOne // 여러개의 답변은 하나의 유저가 달 수 있다.
     @JoinColumn(name="userId")
     private User user;
 
