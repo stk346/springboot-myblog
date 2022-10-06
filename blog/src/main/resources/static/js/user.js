@@ -7,14 +7,14 @@ let index = {
 
     save: function() {
 
-//        alert('user의 save함수 호출됨')
+        alert('user의 save함수 호출됨')
         let data = {
             username: $("#username").val(),
             password: $("#password").val(),
             email: $("#email").val()
         }
 
-//        console.log(data);
+        console.log(data);
 
           // 회원가입 수행 요청
           // ajax 호출시 default가 비동기 호출

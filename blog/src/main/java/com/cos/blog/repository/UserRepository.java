@@ -4,11 +4,17 @@ import com.cos.blog.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 // DAO
 // 자동으로 bean 등록이 된다.
 // User 테이블을 관리하는 Repository이며 User 테이블의 PK는 Integer임을 뜻함.
 // @Repository 생략 가능
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    // 아래 메소드로 인해 실제로 동작하는 쿼리
+    // select * from user where username = 1?;
+    Optional<User> findByUsername (String username);
 
 }
 
