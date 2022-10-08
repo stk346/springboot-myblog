@@ -6,7 +6,7 @@
 <form action="/auth/loginProc" method="post">
   <div class="form-group">
     <label for="username">username</label>
-    <input type="text" name="username" class="form-control" placeholder="Enter email" id="username">
+    <input type="text" name="username" class="form-control" placeholder="Enter username" id="username">
   </div>
 
   <div class="form-group">
