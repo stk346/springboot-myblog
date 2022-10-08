@@ -27,15 +27,22 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    @Transactional(readOnly = true)
     public Page<Board> 글목록(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
+    @Transactional(readOnly = true)
     public Board 글상세보기(int id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> {
                     return new IllegalArgumentException("글 상세보기 실패: 아이디를 찾을 수 없습니다.");
                 });
+    }
+
+    @Transactional
+    public void 글삭제하기(int id) {
+        boardRepository.deleteById(id);
     }
 
 //    @Transactional(readOnly = true) // Select할 때 트랜잭션 시작, 서비스 종료시에 트랜잭션 종료 (정합성을 유지시킬 수 있음.)

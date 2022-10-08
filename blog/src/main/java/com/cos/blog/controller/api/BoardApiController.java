@@ -9,9 +9,7 @@ import com.cos.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BoardApiController {
@@ -23,6 +21,12 @@ public class BoardApiController {
     public ResponseDto<Integer> save(@RequestBody Board board, @AuthenticationPrincipal PrincipalDetail principal) { // username, password, email
         boardService.글쓰기(board, principal.getUser()); // board는 title, content만 들고 있는데 user의 정보도 필요하니 해당 정보도 같이 넣어줌.
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @DeleteMapping("/api/board/{id}")
+    public ResponseDto<Integer> deleteById(@PathVariable int id) {
+        boardService.글삭제하기(id);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1); // 1을 리턴하면 정상이라는 뜻
     }
 
     // 스프링의 전통적인 로그인 방식(시큐리티 사용x)
