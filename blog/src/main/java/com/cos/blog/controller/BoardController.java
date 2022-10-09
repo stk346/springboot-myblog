@@ -26,6 +26,12 @@ public class BoardController { // 컨트롤러에서 세션을 어떻게 찾는�
         return "index"; // RestController가 아닌 controller는 return할 때 viewResolver가 작동한다. 이 때 index 페이지로 model의 정보를 들고 이동한다.
     }
 
+    @GetMapping("/board/{id}/updateForm")
+    public String updateForm(@PathVariable int id, Model model) {
+        model.addAttribute("board", boardService.글상세보기(id));
+        return "board/updateForm";
+    }
+
     @GetMapping("/board/{id}")
     public String findById(@PathVariable int id, Model model) {
         model.addAttribute("board", boardService.글상세보기(id));

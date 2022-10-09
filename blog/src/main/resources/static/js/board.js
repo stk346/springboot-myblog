@@ -10,6 +10,9 @@ let index = {
         $("#btn-delete").on("click", ()=> {
             this.deleteById();
         });
+        $("#btn-update").on("click", ()=> {
+            this.update();
+        });
     },
 
     deleteById: function() {
@@ -25,28 +28,50 @@ let index = {
           }).fail(function(error){ // 실패하면
             alert(JSON.stringify(error));
           });
-    },
+        },
 
     save: function() {
-            let data = {
-                title: $("#title").val(),
-                content: $("#content").val()
-            }
+        let data = {
+            title: $("#title").val(),
+            content: $("#content").val()
+        }
 
-            console.log(data);
+        console.log(data);
 
-              $.ajax({
-                type: "POST",
-                url: "/api/board",
-                data: JSON.stringify(data),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json" // 요청을 서버로 해서 응답이 왔을 때 기본적으로 모든 것이 문자열. / 생긴게 json이라면 -> javascript 오브젝트로 변경
-              }).done(function(resp){ // 성공하면
-                alert("글쓰기가 완료돠었습니다");
-                location.href = "/";
-              }).fail(function(error){ // 실패하면
-                alert(JSON.stringify(error));
-              });
+          $.ajax({
+            type: "POST",
+            url: "/api/board",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json" // 요청을 서버로 해서 응답이 왔을 때 기본적으로 모든 것이 문자열. / 생긴게 json이라면 -> javascript 오브젝트로 변경
+          }).done(function(resp){ // 성공하면
+            alert("글쓰기가 완료돠었습니다");
+            location.href = "/";
+          }).fail(function(error){ // 실패하면
+            alert(JSON.stringify(error));
+          });
+        },
+
+    update: function() {
+        let id = $("#id").val();
+
+        let data = {
+            title: $("#title").val(),
+            content: $("#content").val()
+        };
+
+          $.ajax({
+            type: "PUT",
+            url: "/api/board/"+id,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json" // 요청을 서버로 해서 응답이 왔을 때 기본적으로 모든 것이 문자열. / 생긴게 json이라면 -> javascript 오브젝트로 변경
+          }).done(function(resp){ // 성공하면
+            alert("글 수정이 완료돠었습니다");
+            location.href = "/";
+          }).fail(function(error){ // 실패하면
+            alert(JSON.stringify(error));
+          });
         },
 }
 
