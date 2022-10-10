@@ -1,5 +1,6 @@
 package com.cos.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +37,8 @@ public class Board {
 
     // mappedBy가 적혀있으면 연관관계의 주인이 아니다.(FK가 아니기에 DB에 컬럼을 만들지 않음) Reply의 board가 FK임
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER) // 댓글을 불러오는 방식은 lazy와 eager(즉시)중 선택 가능. 이 프로젝트에서는 펼치기 등의 버튼이 없으므로 즉시 데이터를 불러와야 함
-    private List<Reply> reply; // 하나의 게시글에는 여러개의 댓글이 달릴 수 있음
+    @JsonIgnoreProperties({"board"})
+    private List<Reply> replys; // 하나의 게시글에는 여러개의 댓글이 달릴 수 있음
 
     @CreationTimestamp
     private Timestamp createDate;

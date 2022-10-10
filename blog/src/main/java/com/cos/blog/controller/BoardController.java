@@ -35,6 +35,7 @@ public class BoardController { // 컨트롤러에서 세션을 어떻게 찾는�
     @GetMapping("/board/{id}")
     public String findById(@PathVariable int id, Model model) {
         model.addAttribute("board", boardService.글상세보기(id));
+
         return "board/detail";
     }
 
