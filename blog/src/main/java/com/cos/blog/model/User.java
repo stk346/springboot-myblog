@@ -24,7 +24,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //프로젝트에서 연결된 DB의 넘버링 전략을 따라간다.
     private int id; // 시퀀스, auto_increment
 
-    @Column(nullable = false, length = 30, unique = true) //null이 될 수 없고 최대 길이는 30
+    @Column(nullable = false, length = 100, unique = true) //null이 될 수 없고 최대 길이는 30
     private String username; // 아이디
 
     @Column(nullable = false, length = 100) // 길이가 100으로 넉넉한 이유는 나중에 해쉬를 이용해서 암호회할 것이기 때문에
@@ -37,6 +37,8 @@ public class User {
     // DB는 RoleType이라는게 없다. 따라서 해당 오브젝트의 타입을 알려줘야한다.
     @Enumerated(EnumType.STRING)
     private RoleType role; // ADMIN, USER
+
+    private String oauth; // kakao, google 등 어떤 방식으로 로그인 했는지 판단하는 필드
 
     @CreationTimestamp // 시간이 자동으로 입력된다.
     private Timestamp createDate;

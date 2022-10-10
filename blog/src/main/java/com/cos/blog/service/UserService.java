@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 // Service는 스프링이 컴포넌트 스캔을 통해서 Bean에 등록을 해줌. (IoC를 해준다.)
 @Service
@@ -22,6 +24,14 @@ public class UserService {
 
     @Autowired // DI가 돼서 주입된다.
     private BCryptPasswordEncoder encoder;
+
+    @Transactional(readOnly = true)
+    public User 회원찾기(String username) {
+        User user = userRepository.findByUsername(username).orElseGet(() -> {
+            return new User();
+        }); // user를 찾지 못하면 빈 객체를 리턴
+        return user;
+    }
 
     // Transactional로 인해 회원가입 전체 서비스가 하나의 transaction으로 묶임. 다 끝나면 커밋됨
     @Transactional
@@ -41,10 +51,14 @@ public class UserService {
         User persistance = userRepository.findById(user.getId()).orElseThrow(() -> {
             return new IllegalArgumentException("회원 찾기 실패");
         });
-        String rawPassword = user.getPassword();
-        String encPassword = encoder.encode(rawPassword);
-        persistance.setPassword(encPassword);
-        persistance.setEmail(user.getEmail());
+
+        // Validate 체크 -> oauth값이 없으면 수정 가능
+        if (persistance.getOauth() == null || persistance.getOauth().equals("")) {
+            String rawPassword = user.getPassword();
+            String encPassword = encoder.encode(rawPassword);
+            persistance.setPassword(encPassword);
+            persistance.setEmail(user.getEmail());
+        }
 
         // 회원 수정 함수 종료 = 서비스 종료 = 트랜잭션 종료 -> commit이 자동으로 된다.
         // 영속화된 persistance 객체의 변화가 감지되면 더티체킹이 되어 update 문을 날려준다.
