@@ -45,6 +45,12 @@ public class BoardApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
+    @DeleteMapping("/api/board/{boardId}/reply/{replyId}")
+    public ResponseDto<Integer> replyDelete(@PathVariable int replyId) {
+        boardService.댓글삭제(replyId);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
     // 스프링의 전통적인 로그인 방식(시큐리티 사용x)
 //    @PostMapping("/api/user/login")
 //    public ResponseDto<Integer> login(@RequestBody User user, HttpSession session) {
