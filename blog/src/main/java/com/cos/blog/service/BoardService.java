@@ -7,7 +7,6 @@ import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.repository.ReplyRepository;
-import com.cos.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,9 +26,6 @@ public class BoardService {
 
     @Autowired
     private ReplyRepository replyRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Transactional
     public void 글쓰기(Board board, User user) { // title, content,

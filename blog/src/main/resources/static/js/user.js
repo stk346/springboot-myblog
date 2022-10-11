@@ -9,13 +9,11 @@ let index = {
     },
 
     save: function() {
-
-        alert('user의 save함수 호출됨')
         let data = {
             username: $("#username").val(),
             password: $("#password").val(),
             email: $("#email").val()
-        }
+        };
 
         console.log(data);
 
@@ -29,9 +27,13 @@ let index = {
             contentType: "application/json; charset=utf-8", // body데이터가 어떤 타입인지(MIME)
             dataType: "json" // 요청을 서버로 해서 응답이 왔을 때 기본적으로 모든 것이 문자열. / 생긴게 json이라면 -> javascript 오브젝트로 변경
           }).done(function(resp){ // 성공하면
-            alert("회원가입이 완료돠었습니다");
-//            console.log(resp);
-            location.href = "/";
+          console.log(resp.status)
+            if (resp.status === 500) {
+                alert("회원가입에 실패했습니다.");
+            } else {
+                alert("회원가입이 완료되었습니다");
+//                location.href = "/";
+            }
           }).fail(function(error){ // 실패하면
             alert(JSON.stringify(error));
           });
@@ -39,13 +41,12 @@ let index = {
 
         update: function() {
 
-            alert('user의 save함수 호출됨')
             let data = {
                 id: $("#id").val(),
                 username: $("#username").val(),
                 password: $("#password").val(),
                 email: $("#email").val()
-            }
+            };
 
               $.ajax({
                 type: "PUT",
