@@ -1,11 +1,13 @@
 package com.cos.blog.service;
 
+import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.model.Board;
 import com.cos.blog.model.Reply;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.repository.ReplyRepository;
+import com.cos.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,9 @@ public class BoardService {
 
     @Autowired
     private ReplyRepository replyRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Transactional
     public void 글쓰기(Board board, User user) { // title, content,
@@ -64,16 +69,23 @@ public class BoardService {
     }
 
     @Transactional
-    public void 댓글쓰기(User user, int boardId, Reply requestReply) {
+    public void 댓글쓰기(ReplySaveRequestDto replySaveRequestDto) {
 
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> {
+        User user = userRepository.findById(replySaveRequestDto.getUserId()).orElseThrow(() -> {
+            return new IllegalArgumentException("댓글 쓰기 실패: 유저 id 를 찾을 수 없습니다.");
+        });
+
+        Board board = boardRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(() -> {
             return new IllegalArgumentException("댓글 쓰기 실패: 게시글 id 를 찾을 수 없습니다.");
         });
 
-        requestReply.setUser(user);
-        requestReply.setBoard(board);
+        Reply reply = Reply.builder()
+                .user(user)
+                .board(board)
+                .content(replySaveRequestDto.getContent())
+                .build();
 
-        replyRepository.save(requestReply);
+        replyRepository.save(reply);
     }
 
 //    @Transactional(readOnly = true) // Select할 때 트랜잭션 시작, 서비스 종료시에 트랜잭션 종료 (정합성을 유지시킬 수 있음.)
